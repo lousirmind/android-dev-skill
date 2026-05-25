@@ -1,10 +1,10 @@
 # android-dev-skill
 
-Android App 全流程开发 skill — 从需求讨论到模拟器测试的完整工作流。
+一个独立的 Claude Code agent，通过 Flutter 开发 Android App 的全流程 skill — 从需求讨论到模拟器测试的完整工作流。
 
 ## 概述
 
-基于"灵犀天机"（塔罗 + 梅花易数 + 八字命理 Android App）实战经验提炼的可复用开发流程。采用 3-Agent 协作模型（主 Agent 编排、开发者 Agent 实现、测试者 Agent 验证），覆盖 Flutter/Dart 项目的完整生命周期。
+采用 3-Agent 协作模型（主 Agent 编排、开发者 Agent 实现、测试者 Agent 验证），覆盖 Flutter/Dart Android 项目的完整生命周期。每个 phase 产出可交付的文档或代码，phase 之间前后衔接。
 
 ## 安装
 
@@ -104,11 +104,12 @@ android-dev-skill/
 
 ## 常见坑点
 
-- 八卦二进制模式（0-7）≠ 先天数（1-8），需查表映射（公式: `value==0 ? 8 : 8-value`）
-- 64 卦爻掩码 MSB/LSB 约定必须一致，用 `>> (5-i)` 而非 `>> i`
-- 八字年柱以立春为界（非农历正月初一）
 - Dart 3.12+ 用 `withValues(alpha:)` 而非 `withOpacity()`
 - JSON 数据文件必须在 `pubspec.yaml` 的 `flutter: assets:` 中声明
+- Navigator 路由参数通过 `settings.arguments` 传递，用 `ModalRoute.of(context)!.settings.arguments` 接收
+- `DropdownButtonFormField` 的 `value` 参数已废弃，改用 `initialValue`
+- Android minSdk 设置为 26（`android/app/build.gradle.kts` 中配置）
+- 模拟器需先创建 AVD，再启动 `emulator -avd <name>`，等待 boot_completed 后才能安装应用
 
 ## 许可证
 

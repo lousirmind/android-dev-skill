@@ -1,14 +1,14 @@
 ---
 name: android-dev-skill
 description: >
-  Complete Android App development workflow from design to deployment: requirement discussion → PRD writing → development docs → multi-agent coding (main/dev/tester) → debugging → emulator testing. Specifies exactly which skills (prd, karpathy-guidelines, skill-creator) and tools (AskUserQuestion, TaskCreate, Agent, dart analyze) to invoke at each phase. Use this whenever building a new Android app, generating a structured dev plan, or starting a Flutter project with modular architecture. Trigger on: "start a new app", "android dev plan", "build an Android app", "Flutter project", "app development pipeline", "从零开发Android", "安卓开发流程", "写一个安卓应用", or any multi-phase Flutter project request.
+  Complete Android App development workflow from design to deployment: requirement discussion → PRD writing → development docs → multi-agent coding (main/dev/tester) → debugging → emulator testing. Specifies exactly which skills (prd, karpathy-guidelines, skill-creator) and tools (AskUserQuestion, TaskCreate, Agent, dart analyze) to invoke at each phase. A self-contained agent that guides you through building Flutter Android apps from scratch. Use whenever starting a new Android app, generating a structured dev plan, or beginning a Flutter project with modular architecture. Trigger on: "start a new app", "android dev plan", "build an Android app", "Flutter project", "app development pipeline", "从零开发Android", "安卓开发流程", "写一个安卓应用", or any multi-phase Flutter project request.
 ---
 
 # Android App Development Workflow
 
 ## Overview
 
-A battle-tested pipeline for building Android apps with Flutter/Dart. Uses a 3-agent model: main agent (orchestrator), developer agents (implementers), tester agent (verifier). Based on real project experience. Covers every phase from requirement discussion to emulator testing.
+A complete pipeline for building Android apps with Flutter/Dart. Uses a 3-agent model: main agent (orchestrator), developer agents (implementers), tester agent (verifier). Covers every phase from requirement discussion to emulator testing.
 
 **Key philosophy**: Each phase produces a concrete deliverable. Phase output feeds into the next phase. Never start coding before PRD is written.
 
@@ -154,9 +154,9 @@ lib/
 
 **Parallelization strategy**: Within each step, spawn developer agents for INDEPENDENT modules simultaneously:
 ```
-Same turn → Agent 1: Write meihua model + engine
-             Agent 2: Write tarot model + engine  
-             Agent 3: Write tarot_cards.json (large data file)
+Same turn → Agent 1: Write module A model + engine
+             Agent 2: Write module B model + engine
+             Agent 3: Write large_data.json (bulk data file)
 ```
 
 **Agent dispatch prompt template**:
@@ -213,8 +213,8 @@ Components to build in `lib/widgets/`:
 
 Spawn developer agents in parallel for EACH module:
 ```
-Same turn → Agent A: Write all meihua pages
-             Agent B: Write all tarot pages  
+Same turn → Agent A: Write all module A pages
+             Agent B: Write all module B pages
 ```
 
 Each agent gets:
@@ -385,31 +385,14 @@ Phase start → Main writes foundation → Spawn developers (parallel) → Revie
 Flutter/Android projects generate significant code. To avoid context overflow:
 
 1. **Use TaskCreate to track all subtasks** — tasks survive context compression
-2. **Delegate aggressively** — large data files (tarot_cards.json, 64 hexagrams) always go to subagents
+2. **Delegate aggressively** — large data files (JSON > 300 lines or large datasets) always go to subagents
 3. **Save memory** — write key decisions to project memory directory after each phase
 4. **/compact** — when context > 40%, suggest the user run `/compact` and summarize current state in CLAUDE.md
 5. **Agent isolation** — each developer agent works in isolation, their context doesn't affect yours
 
 ---
 
-## Common Pitfalls Reference
-
-### Algorithm: Trigram number mapping
-3-bit binary pattern (0-7) ≠ 先天八卦数 (1-8). Correct mapping:
-```
-Pattern→Value: 111=7→1(乾), 110=6→2(兑), 101=5→3(离), 100=4→4(震)
-               011=3→5(巽), 010=2→6(坎), 001=1→7(艮), 000=0→8(坤)
-Formula: value == 0 ? 8 : 8 - value
-```
-
-### Algorithm: Hexagram line order convention
-MSB/LSB convention must be consistent between data encoding and reading. Verify with 2-3 known hexagrams. The convention used in the reference project is: MSB=bottom line (初爻), LSB=top line (上爻).
-
-### Algorithm: Hu/Bian Gua bit extraction
-When extracting 3 lines for interaction/change trigrams from a 6-line hexagram, use `bit2=bottom, bit1=middle, bit0=top` consistently across methods.
-
-### Algorithm: BaZi year pillar
-Chinese astrology year starts at Lichun (Feb 4±1), NOT lunar New Year. Birth dates before Lichun use previous year's stem-branch.
+## Common Pitfalls
 
 ### Flutter: Dart 3.12+ compatibility
 - Use `withValues(alpha:)` NOT `withOpacity()` (deprecated)
